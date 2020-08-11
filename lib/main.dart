@@ -26,10 +26,8 @@ class MyApp extends StatelessWidget {
         //primarySwatch: Colors.amber,
         // Define the default brightness and colors.
         brightness: Brightness.dark,
-        primaryColor: Colors.amber, //Colors.lightBlue[800],
-        accentColor: Colors.amberAccent,//Colors.cyan[600],
-
-        // Define the default font family.
+        primaryColor: Colors.amber,
+        accentColor: Colors.amberAccent,
         //fontFamily: 'Georgia',
 
         // Define the default TextTheme. Use this to specify the default
@@ -44,8 +42,7 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Just One'),
-
+      home: MyHomePage(title: '🎲 Just One'),
     );
   }
 }
@@ -61,7 +58,6 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
 
   @override
@@ -72,10 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
   math.Random random = new math.Random();
   String _pickWord = "";
   bool initFile = false;
-  var arr = new List();// creates an empty array of length 5
-  //int _counter = 0;
-
-  /*void _incrementCounter() {
+  var arr = new List();
+  /*int _counter = 0;
+  void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -85,39 +80,34 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }*/
-
-  Future<void> readFileAsync() async {
-    String fileText = await rootBundle.loadString('assets/french.txt');
-    //print(fileText);
-    arr = fileText.split('\n');
-  }
-
-  /*void readFileAsync() async {
-    new File('french.txt').readAsString().then((c) => print(c));
-  }*/
-
   void _newRandom() {
-    if (initFile == false) {
+    if (initFile == true) {
       setState(() {
-        readFileAsync();
-        _pickWord = "Loaded!";
-        initFile = true;
+        _pickWord = arr[random.nextInt(550)];
       });
     } else {
       setState(() {
-        // This call to setState tells the Flutter framework that something has
-        // changed in this State, which causes it to rerun the build method below
-        // so that the display can reflect the updated values. If we changed
-        // _counter without calling setState(), then the build method would not be
-        // called again, and so nothing would appear to happen.
-        _pickWord = arr[random.nextInt(550)]; //random.nextInt(100);
-        //_counter++;
+        _pickWord = "Error _newRandom()";
       });
     }
   }
 
+  Future<void> readFileAsync() async {
+    String fileText = await rootBundle.loadString('assets/french.txt');
+    arr = fileText.split('\n');
+  }
+
   @override
   Widget build(BuildContext context) {
+    //INITIALIZATION, LOADING FILE
+    if (initFile == false) {
+      setState(() {
+        readFileAsync();
+        _pickWord = "...";
+        initFile = true;
+      });
+    }
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -163,7 +153,6 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 '$_pickWord',
                 style: Theme.of(context).textTheme.headline2,
-                //style: TextStyle(color: Colors.amber),
               ),
             ],
           ),
@@ -172,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _newRandom,
         tooltip: 'New word',
-        child: Icon(Icons.casino), //Icon(Icons.add),
+        child: Icon(Icons.casino),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
