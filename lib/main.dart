@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:math' as math;
+//import 'dart:io';
 
 void main() {
   runApp(MyApp());
@@ -9,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Just One Demo',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,13 +23,29 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        //primarySwatch: Colors.amber,
+        // Define the default brightness and colors.
+        brightness: Brightness.dark,
+        primaryColor: Colors.amber, //Colors.lightBlue[800],
+        accentColor: Colors.amberAccent,//Colors.cyan[600],
+
+        // Define the default font family.
+        //fontFamily: 'Georgia',
+
+        // Define the default TextTheme. Use this to specify the default
+        // text styling for headlines, titles, bodies of text, and more.
+        textTheme: TextTheme(
+          //headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
+          //headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
+          //bodyText2: TextStyle(fontSize: 14.0, fontFamily: 'Hind'),
+        ),
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Just One'),
+
     );
   }
 }
@@ -50,9 +69,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  math.Random random = new math.Random();
+  String _pickWord = "";
+  bool initFile = false;
+  var arr = new List();// creates an empty array of length 5
+  //int _counter = 0;
 
-  void _incrementCounter() {
+  /*void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -61,6 +84,36 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }*/
+
+  Future<void> readFileAsync() async {
+    String fileText = await rootBundle.loadString('assets/french.txt');
+    //print(fileText);
+    arr = fileText.split('\n');
+  }
+
+  /*void readFileAsync() async {
+    new File('french.txt').readAsString().then((c) => print(c));
+  }*/
+
+  void _newRandom() {
+    if (initFile == false) {
+      setState(() {
+        readFileAsync();
+        _pickWord = "Loaded!";
+        initFile = true;
+      });
+    } else {
+      setState(() {
+        // This call to setState tells the Flutter framework that something has
+        // changed in this State, which causes it to rerun the build method below
+        // so that the display can reflect the updated values. If we changed
+        // _counter without calling setState(), then the build method would not be
+        // called again, and so nothing would appear to happen.
+        _pickWord = arr[random.nextInt(550)]; //random.nextInt(100);
+        //_counter++;
+      });
+    }
   }
 
   @override
@@ -77,10 +130,17 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
+      body: Container( //Center(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/8RRYJg26Wr4.jpg"),
+            fit: BoxFit.cover,
+            ),
+          ),
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
+        child: Center(
+          child: Column(
           // Column is also a layout widget. It takes a list of children and
           // arranges them vertically. By default, it sizes itself to fit its
           // children horizontally, and tries to be as tall as its parent.
@@ -95,22 +155,24 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Random word:',
+              ),
+              Text(
+                '$_pickWord',
+                style: Theme.of(context).textTheme.headline2,
+                //style: TextStyle(color: Colors.amber),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: _newRandom,
+        tooltip: 'New word',
+        child: Icon(Icons.casino), //Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
