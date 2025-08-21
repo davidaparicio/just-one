@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
         // Define the default brightness and colors.
         brightness: Brightness.dark,
         primaryColor: Colors.amber,
-        accentColor: Colors.amberAccent,
         //fontFamily: 'Georgia',
 
         // Define the default TextTheme. Use this to specify the default
@@ -40,7 +39,7 @@ class MyApp extends StatelessWidget {
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        visualDensity: VisualDensity.adaptivePlatformDensity, colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.amberAccent),
       ),
       home: MyHomePage(title: '🎲 Just One'),
     );
@@ -152,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               Text(
                 '$_pickWord',
-                style: Theme.of(context).textTheme.headline2,
+                style: Theme.of(context).textTheme.displayMedium,
               ),
             ],
           ),
