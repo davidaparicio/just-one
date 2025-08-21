@@ -2,6 +2,10 @@
 
 A simple Just One game.
 
+## 2025 International JustOne Version
+
+[New version/New Github Repository](https://github.com/davidaparicio/just_one)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
